@@ -92,3 +92,16 @@ newdata = expand.grid(FisheryType = FisheryType,
                       ratio_yrs_low_stock = median_ratio_yrs_low_stock,
                       ratio_yrs_overfished = seq(0, 1, by = 0.1))
 newdata
+
+# Begining of new of class
+
+model_qp_predict = predict(model_qp, newdata = newdata, type = "response", se.fit = T)
+head(model_qp_predict)
+
+collapse_time_predictions = cbind(newdata, model_qp_predict)
+head(collapse_time_predictions)
+
+ggplot(data = collapse_time_predictions) +
+  geom_line(aes(x = ratio_yrs_overfished, y = fit, color = FisheryType)) +
+  geom_ribbon(aes(x = ratio_yrs_overfished, ymin = fit - se.fit, ymax = fit + se.fit, fill = FisheryType), alpha = 0.3) +
+  geom_point(aes(x = ratio_yrs_overfished, y = yrs_collapsed, color = FisheryType), data = collapse_summary_zero_trunc)
