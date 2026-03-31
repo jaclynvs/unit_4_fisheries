@@ -79,7 +79,7 @@ summary(model_p)
 install.packages("AER")
 AER::dispersiontest(model_p)
 
-model_qp = glm(yrs_collapsed ~ FisheryType, 
+model_qp = glm(yrs_collapsed ~ FisheryType + ratio_yrs_overfished, 
               offset(log(yrs_data)),
               data = collapse_summary_zero_trunc,
               family = "quasipoisson")
@@ -105,3 +105,6 @@ ggplot(data = collapse_time_predictions) +
   geom_line(aes(x = ratio_yrs_overfished, y = fit, color = FisheryType)) +
   geom_ribbon(aes(x = ratio_yrs_overfished, ymin = fit - se.fit, ymax = fit + se.fit, fill = FisheryType), alpha = 0.3) +
   geom_point(aes(x = ratio_yrs_overfished, y = yrs_collapsed, color = FisheryType), data = collapse_summary_zero_trunc)
+
+head(collapse_time_predictions)
+tail(collapse_time_predictions)
